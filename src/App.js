@@ -6,7 +6,6 @@ function App() {
 
     return (
         <div className='app-container'>
-            <h1>Syntax Differences</h1>
             <SyntaxDiffer languages={languagesToShow} />
         </div>
     );

@@ -15,6 +15,25 @@ body {
     display: flex;
     flex-direction: column;
     padding: 0;
+    padding-top: 35px;
+}
+
+/* language selection Styles */
+.language-toggle-container {
+    display: flex;
+}
+
+.language-toggle-button {
+    background-color: #ccc;
+    border: none;
+    padding: 8px 12px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.language-toggle-button.active {
+    background-color: #007bff;
+    color: #fff;
 }
 
 /* Container Styles */
@@ -38,8 +57,10 @@ body {
 .differ-title-language {
     flex: 1;
     padding: 10px;
-    border-bottom: 1px solid #ccc;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
     text-align: center;
+    margin-bottom: 25px;
 }
 
 /* Content Styles */
@@ -53,6 +74,14 @@ body {
 .syntax-row {
     display: flex;
     flex-direction: column;
+    margin-bottom: 20px;
+    background-color: rgb(242, 249, 250);
+    padding: 10px;
+}
+
+.differ-content h2 {
+    border-bottom: 2px solid #ccc; /* Add a border-bottom style */
+    padding-bottom: 5px;
     margin-bottom: 20px;
 }
 
@@ -73,7 +102,7 @@ body {
 /* Syntax Box Styles */
 .syntax-box {
     flex: 1;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
     padding: 10px;
     margin: 0 10px;
     display: flex;
@@ -91,3 +120,4 @@ body {
     word-wrap: break-word;
     overflow-x: auto;
 }
+
