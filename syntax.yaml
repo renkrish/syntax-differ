@@ -1,0 +1,198 @@
+languages:
+  - name: python
+    label: Python
+  - name: go
+    label: Go
+  - name: groovy
+    label: Groovy   
+syntaxes:
+  - category: declaration
+    subcategories:
+      - title: variable
+        details:
+          - language: python   
+            description: "Declaring a variable in Python"
+            example: |
+              # Declare a variable
+              variable_name = "value"
+              number = 42
+              is_boolean = True
+            notes: "Python uses dynamic typing, so there's no need to explicitly declare a variable type."
+          - language: groovy
+            description: "Declaring a variable in Groovy"
+            example: |
+              // Declare a variable
+              def variableName = "value"
+              def number = 42
+              def isBoolean = true
+            notes: "Groovy uses `def` to declare a variable without specifying the type."
+          - language: go
+            description: "Declaring a variable in Go"
+            example: |
+              // Declare a variable
+              var variableName = "value"
+              var number int = 42
+              var isBoolean bool = true
+            notes: "In Go, you can declare variables using `var` followed by the variable name and type."
+
+      - title: function
+        details:
+          - language: python   
+            description: "Declaring a function in Python"
+            example: |
+              # Declare a function
+              def greet(name):
+                  return f"Hello, {name}!"
+              
+              # Calling a function
+              print(greet("World"))
+            notes: "Functions in Python are defined using the `def` keyword and can return values using the `return` statement."
+          - language: groovy
+            description: "Declaring a function in Groovy"
+            example: |
+              // Declare a function
+              def greet(name) {
+                  return "Hello, ${name}!"
+              }
+              
+              // Calling a function
+              println greet("World")
+            notes: "Functions in Groovy are defined using the `def` keyword and do not require a return type."
+          - language: go
+            description: "Declaring a function in Go"
+            example: |
+              // Declare a function
+              func greet(name string) string {
+                  return "Hello, " + name + "!"
+              }
+              
+              // Calling a function
+              fmt.Println(greet("World"))
+            notes: "Functions in Go are defined using the `func` keyword, and the return type is specified after the parameter list."
+
+      - title: class
+        details:
+          - language: python   
+            description: "Declaring a class in Python"
+            example: |
+              # Declare a class
+              class Example:
+                  def __init__(self, name, age):
+                      self.name = name
+                      self.age = age
+                  
+                  # Method
+                  def display(self):
+                      print(f"Name: {self.name}, Age: {self.age}")
+              
+              # Creating an instance
+              example = Example("Alice", 30)
+              example.display()
+            notes: "Python classes are defined using the `class` keyword and methods are defined with `def`."
+          - language: groovy
+            description: "Declaring a class in Groovy"
+            example: |
+              // Declare a class
+              class Example {
+                  String name
+                  int age
+                  
+                  // Constructor
+                  Example(String name, int age) {
+                      this.name = name
+                      this.age = age
+                  }
+                  
+                  // Method
+                  void display() {
+                      println "Name: ${name}, Age: ${age}"
+                  }
+              }
+            notes: "Groovy classes are similar to Java classes but with additional Groovy features."
+          - language: go
+            description: "Declaring a struct in Go"
+            example: |
+              // Declare a struct
+              type Example struct {
+                  Name string
+                  Age  int
+              }
+              
+              // Method
+              func (e Example) Display() {
+                  fmt.Printf("Name: %s, Age: %d\n", e.Name, e.Age)
+              }
+              
+              // Creating an instance
+              example := Example{Name: "Alice", Age: 30}
+              example.Display()
+            notes: "Go does not have classes but uses structs to define data structures and methods are defined with receiver functions."
+
+      - title: constant
+        details:
+          - language: python   
+            description: "Declaring a constant in Python"
+            example: |
+              # Declare a constant
+              PI = 3.14159
+              GRAVITY = 9.8
+            notes: "Python does not have built-in constant support, but by convention, constants are written in all uppercase letters."
+          - language: groovy
+            description: "Declaring a constant in Groovy"
+            example: |
+              // Declare a constant
+              final PI = 3.14159
+              final GRAVITY = 9.8
+            notes: "Groovy uses the `final` keyword to declare constants."
+          - language: go
+            description: "Declaring a constant in Go"
+            example: |
+              // Declare a constant
+              const PI = 3.14159
+              const GRAVITY = 9.8
+            notes: "Go uses the `const` keyword to declare constants."
+
+      - title: array
+        details:
+          - language: python   
+            description: "Declaring an array in Python"
+            example: |
+              # Declare an array
+              numbers = [1, 2, 3, 4, 5]
+              strings = ["a", "b", "c"]
+            notes: "Python uses lists to represent arrays, which can contain elements of different types."
+          - language: groovy
+            description: "Declaring an array in Groovy"
+            example: |
+              // Declare an array
+              def numbers = [1, 2, 3, 4, 5]
+              def strings = ["a", "b", "c"]
+            notes: "Groovy uses lists to represent arrays, and elements can be of different types."
+          - language: go
+            description: "Declaring an array in Go"
+            example: |
+              // Declare an array
+              var numbers = [5]int{1, 2, 3, 4, 5}
+              var strings = [3]string{"a", "b", "c"}
+            notes: "Go arrays have a fixed size and the type of elements must be specified."
+
+      - title: dictionary
+        details:
+          - language: python   
+            description: "Declaring a dictionary in Python"
+            example: |
+              # Declare a dictionary
+              person = {"name": "Alice", "age": 30}
+            notes: "Python uses dictionaries to store key-value pairs."
+          - language: groovy
+            description: "Declaring a map in Groovy"
+            example: |
+              // Declare a map
+              def person = [name: "Alice", age: 30]
+            notes: "Groovy uses maps to store key-value pairs."
+          - language: go
+            description: "Declaring a map in Go"
+            example: |
+              // Declare a map
+              var person = map[string]interface{}{"name": "Alice", "age": 30}
+            notes: "Go uses maps to store key-value pairs, with the key type and value type specified."

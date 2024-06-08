@@ -1,0 +1,37 @@
+- category: declaration
+  subcategories:
+  - title: variable
+    description: "Declaring a variable in Python"
+    example: |
+      # Declare a variable
+      variable_name = "value"
+      number = 42
+      is_boolean = True
+    notes: "Python uses dynamic typing, so there's no need to explicitly declare a variable type."
+  - title: class
+    description: "Declaring a class in Python"
+    example: |
+      # Declare a class
+      class Example:
+          def __init__(self, name, age):
+              self.name = name
+              self.age = age
+          
+          # Method
+          def display(self):
+              print(f"Name: {self.name}, Age: {self.age}")
+      
+      # Creating an instance
+      example = Example("Alice", 30)
+      example.display()
+    notes: "Python classes are defined using the `class` keyword and methods are defined with `def`."
+  - title: function
+    description: "Declaring a function in Python"
+    example: |
+      # Declare a function
+      def greet(name):
+          return f"Hello, {name}!"
+      
+      # Calling a function
+      print(greet("World"))
+    notes: "Functions in Python are defined using the `def` keyword and can return values using the `return` statement."

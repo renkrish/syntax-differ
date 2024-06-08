@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/syntax-differ/static/css/main.1ca3d670.css",
+    "main.js": "/syntax-differ/static/js/main.4dfd15ba.js",
+    "index.html": "/syntax-differ/index.html",
+    "main.1ca3d670.css.map": "/syntax-differ/static/css/main.1ca3d670.css.map",
+    "main.4dfd15ba.js.map": "/syntax-differ/static/js/main.4dfd15ba.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1ca3d670.css",
+    "static/js/main.4dfd15ba.js"
+  ]
+}
