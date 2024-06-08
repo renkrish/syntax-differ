@@ -1,0 +1,41 @@
+- category: declaration
+  subcategories:
+  - title: variable
+    description: "Declaring a variable in Groovy"
+    example: |
+      // Declare a variable
+      def variableName = "value"
+      def number = 42
+      def isBoolean = true
+    notes: "Groovy uses `def` to declare a variable without specifying the type."
+  - title: class
+    description: "Declaring a class in Groovy"
+    example: |
+      // Declare a class
+      class Example {
+          String name
+          int age
+          
+          // Constructor
+          Example(String name, int age) {
+              this.name = name
+              this.age = age
+          }
+          
+          // Method
+          void display() {
+              println "Name: ${name}, Age: ${age}"
+          }
+      }
+    notes: "Groovy classes are similar to Java classes but with additional Groovy features."
+  - title: function
+    description: "Declaring a function in Groovy"
+    example: |
+      // Declare a function
+      def greet(name) {
+          return "Hello, ${name}!"
+      }
+      
+      // Calling a function
+      println greet("World")
+    notes: "Functions in Groovy are defined using the `def` keyword and do not require a return type."
