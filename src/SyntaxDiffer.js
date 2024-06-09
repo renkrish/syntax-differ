@@ -109,7 +109,7 @@ class SyntaxDiffer extends React.Component {
                     )}
                 </div>
                 <button onClick={this.generateYamlContent} className="generate-yaml-button">
-                    Export
+                    Generate YAML
                 </button>
                 {showYamlModal && (
                     <div className="yaml-modal">

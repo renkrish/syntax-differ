@@ -1,15 +1,14 @@
 import React from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import SyntaxHighlighter from 'react-syntax-highlighter';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import './styles.css';
 
-const SyntaxBox = ({ description, example, notes, language }) => {
+const SyntaxBox = ({ example, notes, language }) => {
     return (
         <div className="syntax-box">
-            <SyntaxHighlighter language={language} style={darcula}>
+            <SyntaxHighlighter language={language} style={docco}>
                 {example}
             </SyntaxHighlighter>
-            <p>{description}</p>
             <p>{notes}</p>
         </div>
     );

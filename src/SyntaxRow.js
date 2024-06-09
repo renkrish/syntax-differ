@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import SyntaxBox from './SyntaxBox';
+import editIcon from './assets/edit_note.svg';
 import './styles.css';
-import editIcon from './assets/edit_note.svg'; // Adjust the path as necessary
 
 const SyntaxRow = ({ title, details, onTitleEdit }) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -17,14 +17,12 @@ const SyntaxRow = ({ title, details, onTitleEdit }) => {
 
     const handleTitleBlur = () => {
         setIsEditing(false);
-        if (editedTitle !== title) {
-            onTitleEdit(editedTitle);
-        }
+        onTitleEdit(editedTitle);
     };
 
     return (
         <div className="syntax-row">
-            <h3 className="syntax-title">
+            <div className="syntax-row-title">
                 {isEditing ? (
                     <input
                         type="text"
@@ -32,28 +30,24 @@ const SyntaxRow = ({ title, details, onTitleEdit }) => {
                         onChange={handleTitleChange}
                         onBlur={handleTitleBlur}
                         autoFocus
-                        className="edit-input"
                     />
                 ) : (
-                    <>
-                        {title}
-                        <img
-                            src={editIcon}
-                            alt="Edit"
-                            className="edit-icon"
-                            onClick={handleEditClick}
-                        />
-                    </>
+                    <h3>{title}</h3>
                 )}
-            </h3>
+                <img
+                    src={editIcon}
+                    alt="Edit"
+                    className="edit-icon"
+                    onClick={handleEditClick}
+                />
+            </div>
             <div className="syntax-column">
                 {details.map((detail, index) => (
                     <SyntaxBox
                         key={index}
-                        description={detail.description}
                         example={detail.example}
                         notes={detail.notes}
-                        language={detail.language}
+                        language={detail.language} // Pass the language prop to SyntaxBox
                     />
                 ))}
             </div>
