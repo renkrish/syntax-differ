@@ -1,7 +1,7 @@
 import React from 'react';
 import yaml from 'js-yaml';
 import SyntaxRow from './SyntaxRow';
-import LanguageToggle from './LanguageToggle'; // Import LanguageToggle component
+import LanguageToggle from './LanguageToggle';
 import './styles.css';
 
 class SyntaxDiffer extends React.Component {
@@ -10,10 +10,16 @@ class SyntaxDiffer extends React.Component {
         this.state = {
             data: null,
             error: null,
-            selectedLanguages: ['python', 'go'], // Set Python and Go as default selected languages
-            languages: [], // Initialize languages array
-            showYamlModal: false, // State to control the YAML modal visibility
-            generatedYaml: '', // State to hold the generated YAML content
+            selectedLanguages: ['python', 'go'],
+            languages: [],
+            showYamlModal: false,
+            generatedYaml: '',
+            showNewSyntaxModal: false, // New state for showing the new syntax modal
+            newTitle: '',
+            newExample: '',
+            newNotes: '',
+            newCategoryIndex: null,
+            newSubcategoryIndex: null,
         };
     }
 
@@ -27,7 +33,7 @@ class SyntaxDiffer extends React.Component {
             })
             .then(text => {
                 const parsedData = yaml.load(text);
-                const languages = parsedData.languages.map(language => language.name); // Extract language names from YAML data
+                const languages = parsedData.languages.map(language => language.name);
                 this.setState({ data: parsedData, languages });
             })
             .catch(error => {
@@ -60,6 +66,57 @@ class SyntaxDiffer extends React.Component {
         this.setState({ data: updatedData });
     };
 
+    handleNewSyntax = (categoryIndex, subcategoryIndex) => {
+        // Open the new syntax modal by updating state
+        this.setState({
+            showNewSyntaxModal: true,
+            newCategoryIndex: categoryIndex,
+            newSubcategoryIndex: subcategoryIndex,
+        });
+    };
+
+    handleNewSyntaxInputChange = event => {
+        // Update state for each input change in the new syntax modal
+        this.setState({ [event.target.name]: event.target.value });
+    };
+
+    handleSubmitNewSyntax = () => {
+        const { newTitle, newExample, newNotes, newCategoryIndex, newSubcategoryIndex } = this.state;
+
+        // Create a new syntax object
+        const newSyntax = {
+            title: newTitle,
+            example: newExample,
+            notes: newNotes,
+            language: "javascript", // Assuming the new syntax is for JavaScript
+        };
+
+        // Update the state with the new syntax
+        const updatedData = { ...this.state.data };
+        updatedData.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex].details.push(newSyntax);
+        this.setState({
+            data: updatedData,
+            showNewSyntaxModal: false, // Close the modal after submission
+            newTitle: '', // Reset the input fields
+            newExample: '',
+            newNotes: '',
+            newCategoryIndex: null, // Reset the category and subcategory indices
+            newSubcategoryIndex: null,
+        });
+    };
+
+    handleCloseNewSyntaxModal = () => {
+        // Close the new syntax modal without making any changes
+        this.setState({
+            showNewSyntaxModal: false,
+            newTitle: '', // Reset the input fields
+            newExample: '',
+            newNotes: '',
+            newCategoryIndex: null, // Reset the category and subcategory indices
+            newSubcategoryIndex: null,
+        });
+    };
+
     generateYamlContent = () => {
         const { data } = this.state;
         const generatedYaml = yaml.dump(data);
@@ -71,7 +128,7 @@ class SyntaxDiffer extends React.Component {
     };
 
     render() {
-        const { data, error, selectedLanguages, languages, showYamlModal, generatedYaml } = this.state;
+        const { data, error, selectedLanguages, languages, showYamlModal, generatedYaml, showNewSyntaxModal, newTitle, newExample, newNotes } = this.state;
 
         if (error) {
             return <div>{error}</div>;
@@ -107,6 +164,7 @@ class SyntaxDiffer extends React.Component {
                                         details={subcategory.details.filter(detail => selectedLanguages.includes(detail.language))}
                                         onTitleEdit={(newTitle) => this.handleTitleEdit(categoryIndex, subcategoryIndex, newTitle)}
                                         onDetailEdit={(detailIndex, newDetail) => this.handleDetailEdit(categoryIndex, subcategoryIndex, detailIndex, newDetail)}
+                                        onNewSyntax={() => this.handleNewSyntax(categoryIndex, subcategoryIndex)}
                                     />
                                 ))}
                             </div>
@@ -129,9 +187,34 @@ class SyntaxDiffer extends React.Component {
                         </div>
                     </div>
                 )}
+                {showNewSyntaxModal && (
+                    <div className="new-syntax-modal">
+                        <div className="new-syntax-modal-content">
+                            <h2>New Syntax</h2>
+                            <div className="input-group">
+                                <label>Title:</label>
+                                <input type="text" name="newTitle" value={newTitle} onChange={this.handleNewSyntaxInputChange} />
+                            </div>
+                            <div className="input-group">
+                                <label>Example:</label>
+                                <textarea name="newExample" value={newExample} onChange={this.handleNewSyntaxInputChange} />
+                            </div>
+                            <div className="input-group">
+                                <label>Notes:</label>
+                                <textarea name="newNotes" value={newNotes} onChange={this.handleNewSyntaxInputChange} />
+                            </div>
+                            <div className="button-group">
+                                <button onClick={this.handleSubmitNewSyntax}>Submit</button>
+                                <button onClick={this.handleCloseNewSyntaxModal}>Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                )}
             </div>
         );
     }
 }
 
 export default SyntaxDiffer;
+

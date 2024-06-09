@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import SyntaxBox from './SyntaxBox';
 import editIcon from './assets/edit_note.svg';
+import newIcon from './assets/new_syntax.svg';
 import './styles.css';
 
-const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit }) => {
+const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit, onNewSyntax }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
 
@@ -22,6 +23,12 @@ const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit }) => {
 
     const handleSyntaxEdit = (index, newDetail) => {
         onDetailEdit(index, newDetail);
+    };
+
+    const handleNewClick = () => {
+        // Logic for handling new syntax click can be implemented here
+        onNewSyntax()
+        console.log("handleNewClick")
     };
 
     return (
@@ -54,6 +61,12 @@ const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit }) => {
                     />
                 ))}
             </div>
+            <img
+                src={newIcon}
+                alt="New"
+                className="new-icon"
+                onClick={ handleNewClick}
+            />
         </div>
     );
 };

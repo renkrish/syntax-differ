@@ -51,7 +51,7 @@ body {
     top: 0;
     display: flex;
     background-color: #fff;
-    z-index: 1;
+    /* z-index: 1; */
 }
 
 .differ-title-language {
@@ -128,6 +128,63 @@ body {
     font-size: 16px;
 }
 
+.new-syntax-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.new-syntax-modal-content {
+    background-color: white;
+    border-radius: 5px;
+    padding: 20px;
+    width: 70%;
+}
+
+.input-group {
+    margin-bottom: 20px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.button-group button {
+    margin-left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.button-group button:hover {
+    background-color: #0056b3;
+}
+
+
 /* Syntax Row Styles */
 .syntax-row {
     display: flex;
@@ -155,6 +212,15 @@ body {
 .edit-icon {
     position: absolute;
     top: 1px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
+    cursor: pointer;
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Adjust size as needed */
+}
+
+.new-icon {
+    position: absolute;
+    bottom: 1px; /* Adjust as needed */
     right: 5px; /* Adjust as needed */
     cursor: pointer;
     width: 20px; /* Adjust size as needed */
