@@ -4,12 +4,12 @@ import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import editIcon from './assets/edit_note.svg';
 import './styles.css';
 
-const SyntaxBox = ({ example, notes, language, onExampleEdit, onNotesEdit }) => {
+const SyntaxBox = ({ details, onEdit }) => {
     const [isExampleEditing, setIsExampleEditing] = useState(false);
-    const [editedExample, setEditedExample] = useState(example);
+    const [editedExample, setEditedExample] = useState(details.example);
 
     const [isNotesEditing, setIsNotesEditing] = useState(false);
-    const [editedNotes, setEditedNotes] = useState(notes);
+    const [editedNotes, setEditedNotes] = useState(details.notes);
 
     const handleExampleEditClick = () => {
         setIsExampleEditing(true);
@@ -29,23 +29,17 @@ const SyntaxBox = ({ example, notes, language, onExampleEdit, onNotesEdit }) => 
 
     const handleExampleBlur = () => {
         setIsExampleEditing(false);
-        onExampleEdit(editedExample);
+        onEdit({ ...details, example: editedExample });
     };
 
     const handleNotesBlur = () => {
         setIsNotesEditing(false);
-        onNotesEdit(editedNotes);
+        onEdit({ ...details, notes: editedNotes });
     };
 
     return (
         <div className="syntax-box">
             <div className="syntax-box-content">
-                <img
-                    src={editIcon}
-                    alt="Edit Example"
-                    className="edit-icon"
-                    onClick={handleExampleEditClick}
-                />
                 {isExampleEditing ? (
                     <textarea
                         value={editedExample}
@@ -54,18 +48,20 @@ const SyntaxBox = ({ example, notes, language, onExampleEdit, onNotesEdit }) => 
                         autoFocus
                     />
                 ) : (
-                    <SyntaxHighlighter language={language} style={docco}>
-                        {example}
-                    </SyntaxHighlighter>
+                    <>
+                        <img
+                            src={editIcon}
+                            alt="Edit Example"
+                            className="edit-icon"
+                            onClick={handleExampleEditClick}
+                        />
+                        <SyntaxHighlighter language={details.language} style={docco}>
+                            {details.example}
+                        </SyntaxHighlighter>
+                    </>
                 )}
             </div>
             <div className="syntax-box-notes-container">
-                <img
-                    src={editIcon}
-                    alt="Edit Notes"
-                    className="edit-icon"
-                    onClick={handleNotesEditClick}
-                />
                 {isNotesEditing ? (
                     <textarea
                         value={editedNotes}
@@ -74,7 +70,15 @@ const SyntaxBox = ({ example, notes, language, onExampleEdit, onNotesEdit }) => 
                         autoFocus
                     />
                 ) : (
-                    <p>{notes}</p>
+                    <>
+                        <img
+                            src={editIcon}
+                            alt="Edit Notes"
+                            className="edit-icon"
+                            onClick={handleNotesEditClick}
+                        />
+                        <p>{details.notes}</p>
+                    </>
                 )}
             </div>
         </div>

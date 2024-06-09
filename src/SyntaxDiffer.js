@@ -26,7 +26,7 @@ class SyntaxDiffer extends React.Component {
                 return response.text();
             })
             .then(text => {
-                const parsedData = yaml.safeLoad(text);
+                const parsedData = yaml.load(text);
                 const languages = parsedData.languages.map(language => language.name); // Extract language names from YAML data
                 this.setState({ data: parsedData, languages });
             })
@@ -54,9 +54,15 @@ class SyntaxDiffer extends React.Component {
         this.setState({ data: updatedData });
     };
 
+    handleDetailEdit = (categoryIndex, subcategoryIndex, detailIndex, newDetail) => {
+        const updatedData = { ...this.state.data };
+        updatedData.syntaxes[categoryIndex].subcategories[subcategoryIndex].details[detailIndex] = newDetail;
+        this.setState({ data: updatedData });
+    };
+
     generateYamlContent = () => {
         const { data } = this.state;
-        const generatedYaml = yaml.safeDump(data);
+        const generatedYaml = yaml.dump(data);
         this.setState({ generatedYaml, showYamlModal: true });
     };
 
@@ -100,6 +106,7 @@ class SyntaxDiffer extends React.Component {
                                         title={subcategory.title}
                                         details={subcategory.details.filter(detail => selectedLanguages.includes(detail.language))}
                                         onTitleEdit={(newTitle) => this.handleTitleEdit(categoryIndex, subcategoryIndex, newTitle)}
+                                        onDetailEdit={(detailIndex, newDetail) => this.handleDetailEdit(categoryIndex, subcategoryIndex, detailIndex, newDetail)}
                                     />
                                 ))}
                             </div>

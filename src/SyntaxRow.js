@@ -3,7 +3,7 @@ import SyntaxBox from './SyntaxBox';
 import editIcon from './assets/edit_note.svg';
 import './styles.css';
 
-const SyntaxRow = ({ title, details, onTitleEdit }) => {
+const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
 
@@ -18,6 +18,10 @@ const SyntaxRow = ({ title, details, onTitleEdit }) => {
     const handleTitleBlur = () => {
         setIsEditing(false);
         onTitleEdit(editedTitle);
+    };
+
+    const handleSyntaxEdit = (index, newDetail) => {
+        onDetailEdit(index, newDetail);
     };
 
     return (
@@ -45,9 +49,8 @@ const SyntaxRow = ({ title, details, onTitleEdit }) => {
                 {details.map((detail, index) => (
                     <SyntaxBox
                         key={index}
-                        example={detail.example}
-                        notes={detail.notes}
-                        language={detail.language} // Pass the language prop to SyntaxBox
+                        details={detail}
+                        onEdit={(newDetail) => handleSyntaxEdit(index, newDetail)}
                     />
                 ))}
             </div>
