@@ -2,8 +2,9 @@ import React from 'react';
 import yaml from 'js-yaml';
 import SyntaxRow from './SyntaxRow';
 import LanguageToggle from './LanguageToggle';
+import NewSyntaxModal from './NewSyntaxModal';
 import './styles.css';
-import './NewSyntax.css'
+
 class SyntaxDiffer extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +15,7 @@ class SyntaxDiffer extends React.Component {
             languages: [],
             showYamlModal: false,
             generatedYaml: '',
-            showNewSyntaxModal: false, // New state for showing the new syntax modal
+            showNewSyntaxModal: false,
             newTitle: '',
             newExample: '',
             newNotes: '',
@@ -67,7 +68,6 @@ class SyntaxDiffer extends React.Component {
     };
 
     handleNewSyntax = (categoryIndex, subcategoryIndex) => {
-        // Open the new syntax modal by updating state
         this.setState({
             showNewSyntaxModal: true,
             newCategoryIndex: categoryIndex,
@@ -76,43 +76,37 @@ class SyntaxDiffer extends React.Component {
     };
 
     handleNewSyntaxInputChange = event => {
-        // Update state for each input change in the new syntax modal
         this.setState({ [event.target.name]: event.target.value });
     };
 
     handleSubmitNewSyntax = () => {
         const { newTitle, newExample, newNotes, newCategoryIndex, newSubcategoryIndex } = this.state;
-
-        // Create a new syntax object
         const newSyntax = {
             title: newTitle,
             example: newExample,
             notes: newNotes,
-            language: "javascript", // Assuming the new syntax is for JavaScript
+            language: "javascript",
         };
-
-        // Update the state with the new syntax
         const updatedData = { ...this.state.data };
         updatedData.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex].details.push(newSyntax);
         this.setState({
             data: updatedData,
-            showNewSyntaxModal: false, // Close the modal after submission
-            newTitle: '', // Reset the input fields
+            showNewSyntaxModal: false,
+            newTitle: '',
             newExample: '',
             newNotes: '',
-            newCategoryIndex: null, // Reset the category and subcategory indices
+            newCategoryIndex: null,
             newSubcategoryIndex: null,
         });
     };
 
     handleCloseNewSyntaxModal = () => {
-        // Close the new syntax modal without making any changes
         this.setState({
             showNewSyntaxModal: false,
-            newTitle: '', // Reset the input fields
+            newTitle: '',
             newExample: '',
             newNotes: '',
-            newCategoryIndex: null, // Reset the category and subcategory indices
+            newCategoryIndex: null,
             newSubcategoryIndex: null,
         });
     };
@@ -187,34 +181,18 @@ class SyntaxDiffer extends React.Component {
                         </div>
                     </div>
                 )}
-                {showNewSyntaxModal && (
-                    <div className="new-syntax-modal">
-                        <div className="new-syntax-modal-content">
-                            <h2>New Syntax</h2>
-                            <div className="input-group">
-                                <label>Title:</label>
-                                <input type="text" name="newTitle" value={newTitle} onChange={this.handleNewSyntaxInputChange} />
-                            </div>
-                            <div className="input-group">
-                                <label>Example:</label>
-                                <textarea name="newExample" value={newExample} onChange={this.handleNewSyntaxInputChange} />
-                            </div>
-                            <div className="input-group">
-                                <label>Notes:</label>
-                                <textarea name="newNotes" value={newNotes} onChange={this.handleNewSyntaxInputChange} />
-                            </div>
-                            <div className="button-group">
-                                <button onClick={this.handleSubmitNewSyntax}>Submit</button>
-                                <button onClick={this.handleCloseNewSyntaxModal}>Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-
-                )}
+                <NewSyntaxModal
+                    show={showNewSyntaxModal}
+                    newTitle={newTitle}
+                    newExample={newExample}
+                    newNotes={newNotes}
+                    handleNewSyntaxInputChange={this.handleNewSyntaxInputChange}
+                    handleSubmitNewSyntax={this.handleSubmitNewSyntax}
+                    handleCloseNewSyntaxModal={this.handleCloseNewSyntaxModal}
+                />
             </div>
         );
     }
 }
 
 export default SyntaxDiffer;
-
