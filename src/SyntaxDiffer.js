@@ -33,7 +33,7 @@ class SyntaxDiffer extends React.Component {
             .then(text => {
                 const parsedData = yaml.load(text);
                 const languages = parsedData.languages.map(language => language.name);
-                this.setState({ data: parsedData, languages });
+                this.setState({ data: parsedData, languages: languages});
             })
             .catch(error => {
                 console.error('Error loading YAML file:', error);
@@ -70,18 +70,6 @@ class SyntaxDiffer extends React.Component {
             showNewSyntaxModal: true,
             newCategoryIndex: categoryIndex,
             newSubcategoryIndex: subcategoryIndex,
-        });
-    };
-
-    handleSubmitNewSyntax = (newSyntax) => {
-        const { newCategoryIndex, newSubcategoryIndex } = this.state;
-        const updatedData = { ...this.state.data };
-        updatedData.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex].details.push(newSyntax);
-        this.setState({
-            data: updatedData,
-            showNewSyntaxModal: false,
-            newCategoryIndex: null,
-            newSubcategoryIndex: null,
         });
     };
 
@@ -165,8 +153,14 @@ class SyntaxDiffer extends React.Component {
                 )}
                 {showNewSyntaxModal && (
                     <NewSyntaxModal
-                        onSubmit={this.handleSubmitNewSyntax}
+                        onSubmit={updatedData => {
+                            this.setState({ data: updatedData, showNewSyntaxModal: false });
+                        }}
                         onClose={this.handleCloseNewSyntaxModal}
+                        languages={languages}
+                        categoryIndex={this.state.newCategoryIndex}
+                        subCategoryIndex={this.state.newCategoryIndex}
+                        data={this.state.data}
                     />
                 )}
             </div>

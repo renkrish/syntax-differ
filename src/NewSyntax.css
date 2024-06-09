@@ -34,6 +34,9 @@
     border-radius: 5px;
     box-sizing: border-box;
 }
+.input-group .example-textarea {
+    height: 150px; /* Increase the height of the example box */
+}
 
 .button-group {
     display: flex;
