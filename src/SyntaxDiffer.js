@@ -12,11 +12,13 @@ class SyntaxDiffer extends React.Component {
             error: null,
             selectedLanguages: ['python', 'go'], // Set Python and Go as default selected languages
             languages: [], // Initialize languages array
+            showYamlModal: false, // State to control the YAML modal visibility
+            generatedYaml: '', // State to hold the generated YAML content
         };
     }
 
     componentDidMount() {
-        fetch(process.env.PUBLIC_URL + 'syntax.yaml')
+        fetch(process.env.PUBLIC_URL + '/syntax.yaml')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -46,8 +48,24 @@ class SyntaxDiffer extends React.Component {
         }
     };
 
+    handleTitleEdit = (categoryIndex, subcategoryIndex, newTitle) => {
+        const updatedData = { ...this.state.data };
+        updatedData.syntaxes[categoryIndex].subcategories[subcategoryIndex].title = newTitle;
+        this.setState({ data: updatedData });
+    };
+
+    generateYamlContent = () => {
+        const { data } = this.state;
+        const generatedYaml = yaml.safeDump(data);
+        this.setState({ generatedYaml, showYamlModal: true });
+    };
+
+    closeYamlModal = () => {
+        this.setState({ showYamlModal: false });
+    };
+
     render() {
-        const { data, error, selectedLanguages, languages } = this.state;
+        const { data, error, selectedLanguages, languages, showYamlModal, generatedYaml } = this.state;
 
         if (error) {
             return <div>{error}</div>;
@@ -59,12 +77,11 @@ class SyntaxDiffer extends React.Component {
 
         return (
             <div className="differ-container">
-                    {/* Toggle buttons */}
-                    <LanguageToggle
-                        languages={languages}
-                        selectedLanguages={selectedLanguages}
-                        toggleLanguage={this.toggleLanguage}
-                    />
+                <LanguageToggle
+                    languages={languages}
+                    selectedLanguages={selectedLanguages}
+                    toggleLanguage={this.toggleLanguage}
+                />
                 <div className="differ-header">
                     {selectedLanguages.map(language => (
                         <h2 key={language} className="differ-title-language">
@@ -74,14 +91,15 @@ class SyntaxDiffer extends React.Component {
                 </div>
                 <div className="differ-content">
                     {Array.isArray(data.syntaxes) && data.syntaxes.length > 0 ? (
-                        data.syntaxes.map(syntax => (
+                        data.syntaxes.map((syntax, categoryIndex) => (
                             <div key={syntax.category}>
                                 <h2>{syntax.category}</h2>
-                                {syntax.subcategories.map(subcategory => (
+                                {syntax.subcategories.map((subcategory, subcategoryIndex) => (
                                     <SyntaxRow
                                         key={subcategory.title}
                                         title={subcategory.title}
                                         details={subcategory.details.filter(detail => selectedLanguages.includes(detail.language))}
+                                        onTitleEdit={(newTitle) => this.handleTitleEdit(categoryIndex, subcategoryIndex, newTitle)}
                                     />
                                 ))}
                             </div>
@@ -90,6 +108,20 @@ class SyntaxDiffer extends React.Component {
                         <div>No syntax data available.</div>
                     )}
                 </div>
+                <button onClick={this.generateYamlContent} className="generate-yaml-button">
+                    Export
+                </button>
+                {showYamlModal && (
+                    <div className="yaml-modal">
+                        <div className="yaml-modal-content">
+                            <h2>Updated YAML Content</h2>
+                            <textarea readOnly value={generatedYaml} className="yaml-textarea" />
+                            <button onClick={this.closeYamlModal} className="close-modal-button">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }
