@@ -143,8 +143,19 @@ body {
     align-items: center;
 }
 
+/* Add this CSS to position the edit icon */
+.syntax-box-content {
+    position: relative; /* Add position relative to create a positioning context */
+}
+/* Add this CSS to position the edit icon */
+.syntax-box-notes-container {
+    position: relative; /* Add position relative to create a positioning context */
+}
+
 .edit-icon {
-    margin-left: 10px;
+    position: absolute;
+    top: 1px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
     cursor: pointer;
     width: 20px; /* Adjust size as needed */
     height: 20px; /* Adjust size as needed */
@@ -196,4 +207,14 @@ body {
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-x: auto;
+}
+
+/* Add this CSS to adjust the text areas */
+.syntax-box-content textarea,
+.syntax-box-notes-container textarea {
+    width: calc(100% - 40px); /* Subtracting space for the edit icon */
+    height: 100px; /* Adjust the height as needed */
+    resize: vertical; /* Allow vertical resizing */
+    padding: 10px; /* Add padding for better readability */
+    margin-top: 10px; /* Add margin for separation */
 }
