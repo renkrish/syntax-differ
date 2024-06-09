@@ -5,6 +5,7 @@ import LanguageToggle from './LanguageToggle';
 import NewSyntaxModal from './NewSyntaxModal';
 import './styles.css';
 
+
 class SyntaxDiffer extends React.Component {
     constructor(props) {
         super(props);
@@ -16,9 +17,6 @@ class SyntaxDiffer extends React.Component {
             showYamlModal: false,
             generatedYaml: '',
             showNewSyntaxModal: false,
-            newTitle: '',
-            newExample: '',
-            newNotes: '',
             newCategoryIndex: null,
             newSubcategoryIndex: null,
         };
@@ -75,26 +73,13 @@ class SyntaxDiffer extends React.Component {
         });
     };
 
-    handleNewSyntaxInputChange = event => {
-        this.setState({ [event.target.name]: event.target.value });
-    };
-
-    handleSubmitNewSyntax = () => {
-        const { newTitle, newExample, newNotes, newCategoryIndex, newSubcategoryIndex } = this.state;
-        const newSyntax = {
-            title: newTitle,
-            example: newExample,
-            notes: newNotes,
-            language: "javascript",
-        };
+    handleSubmitNewSyntax = (newSyntax) => {
+        const { newCategoryIndex, newSubcategoryIndex } = this.state;
         const updatedData = { ...this.state.data };
         updatedData.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex].details.push(newSyntax);
         this.setState({
             data: updatedData,
             showNewSyntaxModal: false,
-            newTitle: '',
-            newExample: '',
-            newNotes: '',
             newCategoryIndex: null,
             newSubcategoryIndex: null,
         });
@@ -103,9 +88,6 @@ class SyntaxDiffer extends React.Component {
     handleCloseNewSyntaxModal = () => {
         this.setState({
             showNewSyntaxModal: false,
-            newTitle: '',
-            newExample: '',
-            newNotes: '',
             newCategoryIndex: null,
             newSubcategoryIndex: null,
         });
@@ -122,7 +104,7 @@ class SyntaxDiffer extends React.Component {
     };
 
     render() {
-        const { data, error, selectedLanguages, languages, showYamlModal, generatedYaml, showNewSyntaxModal, newTitle, newExample, newNotes } = this.state;
+        const { data, error, selectedLanguages, languages, showYamlModal, generatedYaml, showNewSyntaxModal } = this.state;
 
         if (error) {
             return <div>{error}</div>;
@@ -181,15 +163,12 @@ class SyntaxDiffer extends React.Component {
                         </div>
                     </div>
                 )}
-                <NewSyntaxModal
-                    show={showNewSyntaxModal}
-                    newTitle={newTitle}
-                    newExample={newExample}
-                    newNotes={newNotes}
-                    handleNewSyntaxInputChange={this.handleNewSyntaxInputChange}
-                    handleSubmitNewSyntax={this.handleSubmitNewSyntax}
-                    handleCloseNewSyntaxModal={this.handleCloseNewSyntaxModal}
-                />
+                {showNewSyntaxModal && (
+                    <NewSyntaxModal
+                        onSubmit={this.handleSubmitNewSyntax}
+                        onClose={this.handleCloseNewSyntaxModal}
+                    />
+                )}
             </div>
         );
     }
