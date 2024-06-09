@@ -17,6 +17,7 @@ const SyntaxRow = ({ title, details }) => {
                     />
                 ))}
             </div>
+            <div className="edit-link">Edit</div> {/* Add the Edit link */}
         </div>
     );
 };

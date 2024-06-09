@@ -16,7 +16,7 @@ class SyntaxDiffer extends React.Component {
     }
 
     componentDidMount() {
-        fetch('syntax.yaml')
+        fetch(process.env.PUBLIC_URL + 'syntax.yaml')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');

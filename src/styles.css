@@ -77,6 +77,17 @@ body {
     margin-bottom: 20px;
     background-color: rgb(242, 249, 250);
     padding: 10px;
+    position: relative;
+}
+
+
+.edit-link {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px;
+    color: blue; /* Customize color as needed */
+    cursor: pointer;
 }
 
 .differ-content h2 {
