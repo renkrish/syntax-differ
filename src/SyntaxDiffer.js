@@ -3,7 +3,7 @@ import yaml from 'js-yaml';
 import SyntaxRow from './SyntaxRow';
 import LanguageToggle from './LanguageToggle';
 import './styles.css';
-
+import './NewSyntax.css'
 class SyntaxDiffer extends React.Component {
     constructor(props) {
         super(props);
