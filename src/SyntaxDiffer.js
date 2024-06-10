@@ -1,28 +1,35 @@
-import React from 'react';
+// SyntaxDiffer.js
+import React, { useEffect, useState } from 'react';
 import yaml from 'js-yaml';
 import SyntaxRow from './SyntaxRow';
 import LanguageToggle from './LanguageToggle';
 import NewSyntaxModal from './NewSyntaxModal';
+import { useSyntax } from './SyntaxContext';
+
 import './styles.css';
 
+const SyntaxDiffer = () => {
 
-class SyntaxDiffer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: null,
-            error: null,
-            selectedLanguages: ['python', 'go'],
-            languages: [],
-            showYamlModal: false,
-            generatedYaml: '',
-            showNewSyntaxModal: false,
-            newCategoryIndex: null,
-            newSubcategoryIndex: null,
-        };
-    }
+    const {
+        data,
+        setData,
+        selectedLanguages,
+        setSelectedLanguages,
+        languages,
+        setLanguages,
+        showYamlModal,
+        generatedYaml,
+        showNewSyntaxModal,
+        setShowNewSyntaxModal,
+        setNewCategoryIndex,
+        setNewSubcategoryIndex,
+        error,
+        setError,
+        setGeneratedYaml,
+        setShowYamlModal,
+    } = useSyntax();
 
-    componentDidMount() {
+    useEffect(() => {
         fetch(process.env.PUBLIC_URL + '/syntax.yaml')
             .then(response => {
                 if (!response.ok) {
@@ -32,140 +39,117 @@ class SyntaxDiffer extends React.Component {
             })
             .then(text => {
                 const parsedData = yaml.load(text);
-                const languages = parsedData.languages.map(language => language.name);
-                this.setState({ data: parsedData, languages: languages});
+                const languageNames = parsedData.languages.map(language => language.name);
+                setData(parsedData);
+                setLanguages(languageNames);
             })
             .catch(error => {
                 console.error('Error loading YAML file:', error);
-                this.setState({ error: 'Failed to load syntax data.' });
+                setError('Failed to load syntax data.');
             });
-    }
+    }, [setData, setLanguages, setError]);
 
-    toggleLanguage = language => {
-        const { selectedLanguages } = this.state;
+    const toggleLanguage = language => {
         const index = selectedLanguages.indexOf(language);
         if (index === -1) {
-            this.setState({ selectedLanguages: [...selectedLanguages, language] });
+            setSelectedLanguages([...selectedLanguages, language]);
         } else {
             const updatedLanguages = [...selectedLanguages];
             updatedLanguages.splice(index, 1);
-            this.setState({ selectedLanguages: updatedLanguages });
+            setSelectedLanguages(updatedLanguages);
         }
     };
 
-    handleTitleEdit = (categoryIndex, subcategoryIndex, newTitle) => {
-        const updatedData = { ...this.state.data };
+    const handleTitleEdit = (categoryIndex, subcategoryIndex, newTitle) => {
+        const updatedData = { ...data };
         updatedData.syntaxes[categoryIndex].subcategories[subcategoryIndex].title = newTitle;
-        this.setState({ data: updatedData });
+        setData(updatedData);
     };
 
-    handleDetailEdit = (categoryIndex, subcategoryIndex, detailIndex, newDetail) => {
-        const updatedData = { ...this.state.data };
+    const handleDetailEdit = (categoryIndex, subcategoryIndex, detailIndex, newDetail) => {
+        const updatedData = { ...data };
         updatedData.syntaxes[categoryIndex].subcategories[subcategoryIndex].details[detailIndex] = newDetail;
-        this.setState({ data: updatedData });
+        setData(updatedData);
     };
 
-    handleNewSyntax = (categoryIndex, subcategoryIndex) => {
-        this.setState({
-            showNewSyntaxModal: true,
-            newCategoryIndex: categoryIndex,
-            newSubcategoryIndex: subcategoryIndex,
-        });
+    const handleNewSyntax = (categoryIndex, subcategoryIndex) => {
+        setShowNewSyntaxModal(true);
+        setNewCategoryIndex(categoryIndex);
+        setNewSubcategoryIndex(subcategoryIndex);
     };
 
-    handleCloseNewSyntaxModal = () => {
-        this.setState({
-            showNewSyntaxModal: false,
-            newCategoryIndex: null,
-            newSubcategoryIndex: null,
-        });
-    };
-
-    generateYamlContent = () => {
-        const { data } = this.state;
+    const generateYamlContent = () => {
         const generatedYaml = yaml.dump(data);
-        this.setState({ generatedYaml, showYamlModal: true });
+        setGeneratedYaml(generatedYaml);
+        setShowYamlModal(true);
     };
 
-    closeYamlModal = () => {
-        this.setState({ showYamlModal: false });
+    const closeYamlModal = () => {
+        setShowYamlModal(false);
     };
 
-    render() {
-        const { data, error, selectedLanguages, languages, showYamlModal, generatedYaml, showNewSyntaxModal } = this.state;
+    if (error) {
+        return <div>{error}</div>;
+    }
 
-        if (error) {
-            return <div>{error}</div>;
-        }
+    if (!data) {
+        return <div>Loading...</div>;
+    }
 
-        if (!data) {
-            return <div>Loading...</div>;
-        }
-
-        return (
-            <div className="differ-container">
-                <LanguageToggle
-                    languages={languages}
-                    selectedLanguages={selectedLanguages}
-                    toggleLanguage={this.toggleLanguage}
-                />
-                <div className="differ-header">
-                    {selectedLanguages.map(language => (
-                        <h2 key={language} className="differ-title-language">
-                            {language}
-                        </h2>
-                    ))}
-                </div>
-                <div className="differ-content">
-                    {Array.isArray(data.syntaxes) && data.syntaxes.length > 0 ? (
-                        data.syntaxes.map((syntax, categoryIndex) => (
-                            <div key={syntax.category}>
-                                <h2>{syntax.category}</h2>
-                                {syntax.subcategories.map((subcategory, subcategoryIndex) => (
-                                    <SyntaxRow
-                                        key={subcategory.title}
-                                        title={subcategory.title}
-                                        details={subcategory.details.filter(detail => selectedLanguages.includes(detail.language))}
-                                        onTitleEdit={(newTitle) => this.handleTitleEdit(categoryIndex, subcategoryIndex, newTitle)}
-                                        onDetailEdit={(detailIndex, newDetail) => this.handleDetailEdit(categoryIndex, subcategoryIndex, detailIndex, newDetail)}
-                                        onNewSyntax={() => this.handleNewSyntax(categoryIndex, subcategoryIndex)}
-                                    />
-                                ))}
-                            </div>
-                        ))
-                    ) : (
-                        <div>No syntax data available.</div>
-                    )}
-                </div>
-                <button onClick={this.generateYamlContent} className="generate-yaml-button">
-                    Generate YAML
-                </button>
-                {showYamlModal && (
-                    <div className="yaml-modal">
-                        <div className="yaml-modal-content">
-                            <h2>Updated YAML Content</h2>
-                            <textarea readOnly value={generatedYaml} className="yaml-textarea" />
-                            <button onClick={this.closeYamlModal} className="close-modal-button">
-                                Close
-                            </button>
+    return (
+        <div className="differ-container">
+            <LanguageToggle
+                languages={languages}
+                selectedLanguages={selectedLanguages}
+                toggleLanguage={toggleLanguage}
+            />
+            <div className="differ-header">
+                {selectedLanguages.map(language => (
+                    <h2 key={language} className="differ-title-language">
+                        {language}
+                    </h2>
+                ))}
+            </div>
+            <div className="differ-content">
+                {Array.isArray(data.syntaxes) && data.syntaxes.length > 0 ? (
+                    data.syntaxes.map((syntax, categoryIndex) => (
+                        <div key={syntax.category}>
+                            <h2>{syntax.category}</h2>
+                            {syntax.subcategories.map((subcategory, subcategoryIndex) => (
+                                <SyntaxRow
+                                    key={subcategory.title}
+                                    title={subcategory.title}
+                                    details={subcategory.details.filter(detail => selectedLanguages.includes(detail.language))}
+                                    onTitleEdit={(newTitle) => handleTitleEdit(categoryIndex, subcategoryIndex, newTitle)}
+                                    onDetailEdit={(detailIndex, newDetail) => handleDetailEdit(categoryIndex, subcategoryIndex, detailIndex, newDetail)}
+                                    onNewSyntax={() => handleNewSyntax(categoryIndex, subcategoryIndex)}
+                                />
+                            ))}
                         </div>
-                    </div>
-                )}
-                {showNewSyntaxModal && (
-                    <NewSyntaxModal
-                        onSubmit={updatedData => {
-                            this.setState({ data: updatedData, showNewSyntaxModal: false });
-                        }}
-                        onClose={this.handleCloseNewSyntaxModal}
-                        languages={languages}
-                        categoryIndex={this.state.newCategoryIndex}
-                        subCategoryIndex={this.state.newCategoryIndex}
-                        data={this.state.data}
-                    />
+                    ))
+                ) : (
+                    <div>No syntax data available.</div>
                 )}
             </div>
-        );
-    }
-}
+            <button onClick={generateYamlContent} className="generate-yaml-button">
+                Generate YAML
+            </button>
+            {showYamlModal && (
+                <div className="yaml-modal">
+                    <div className="yaml-modal-content">
+                        <h2>Updated YAML Content</h2>
+                        <textarea readOnly value={generatedYaml} className="yaml-textarea" />
+                        <button onClick={closeYamlModal} className="close-modal-button">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+            {showNewSyntaxModal && (
+                <NewSyntaxModal/>
+            )}
+        </div>
+    );
+};
 
 export default SyntaxDiffer;

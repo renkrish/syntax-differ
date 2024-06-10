@@ -1,40 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
+import { useSyntax } from './SyntaxContext';
 import './NewSyntax.css';
 
-const NewSyntaxModal = ({ onSubmit, onClose, languages, categoryIndex, subCategoryIndex, data }) => {
+const NewSyntaxModal = () => {
+    const {
+        data,
+        setData,
+        languages,
+        setShowNewSyntaxModal,
+        newCategoryIndex,
+        setNewCategoryIndex,
+        newSubcategoryIndex,
+        setNewSubcategoryIndex,
+        
+    } = useSyntax();
+
     const [newExample, setNewExample] = useState('');
     const [newNotes, setNewNotes] = useState('');
     const [selectedLanguage, setSelectedLanguage] = useState(null);
-    const [newCategoryIndex, setNewCategoryIndex] = useState(categoryIndex);
     const [newTitle, setNewTitle] = useState('');
     const [categoryTitle, setCategoryTitle] = useState('');
 
     useEffect(() => {
         // Set the category and subcategory titles based on the provided indices and data content
-        if (data && data.syntaxes && data.syntaxes[categoryIndex] && data.syntaxes[categoryIndex].category) {
-            setCategoryTitle(data.syntaxes[categoryIndex].category);
+        if (data && data.syntaxes && data.syntaxes[newCategoryIndex] && data.syntaxes[newCategoryIndex].category) {
+            setCategoryTitle(data.syntaxes[newCategoryIndex].category);
             if (
-                data.syntaxes[categoryIndex].subcategories &&
-                data.syntaxes[categoryIndex].subcategories[subCategoryIndex] &&
-                data.syntaxes[categoryIndex].subcategories[subCategoryIndex].title
+                data.syntaxes[newCategoryIndex].subcategories &&
+                data.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex] &&
+                data.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex].title
             ) {
-                setNewTitle(data.syntaxes[categoryIndex].subcategories[subCategoryIndex].title);
+                setNewTitle(data.syntaxes[newCategoryIndex].subcategories[newSubcategoryIndex].title);
             }
         }
-    }, [data, categoryIndex, subCategoryIndex]);
+    }, [data, newCategoryIndex, newSubcategoryIndex]);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        if (name === 'newTitle') {
-            setNewTitle(value);
-        } else if (name === 'newExample') {
-            setNewExample(value);
-        } else if (name === 'newNotes') {
-            setNewNotes(value);
-        }
-    };
 
+    const handleClose = () => {
+        setNewCategoryIndex(null)
+        setNewSubcategoryIndex(null)
+    }
     const handleSubmit = () => {
         // Create a new syntax object
         const newSyntax = {
@@ -68,23 +74,22 @@ const NewSyntaxModal = ({ onSubmit, onClose, languages, categoryIndex, subCatego
             // If the subcategory does not exist, create a new one
             const newSubcategory = {
                 title: newTitle,
-                details: [newSyntax],
+                details: languages.map(language => language === newSyntax.language ? newSyntax : { language, example: "TBD", notes: "TBD" }),
             };
-            // Find the index where the new subcategory should be inserted
-            const insertIndex = subCategoryIndex + 1;
 
             // Insert the new subcategory at the specified index
-            category.subcategories.splice(insertIndex, 0, newSubcategory);
+            category.subcategories.splice(newSubcategoryIndex + 1, 0, newSubcategory);
         }
     
         // Pass the updated data back to the parent component
-        onSubmit(data);
+        setData(data);
     
         // Reset the form fields
         setNewTitle('');
         setSelectedLanguage(null);
         setNewExample('');
         setNewNotes('');
+        setShowNewSyntaxModal(false);
     };
     
 
@@ -103,15 +108,15 @@ const NewSyntaxModal = ({ onSubmit, onClose, languages, categoryIndex, subCatego
                 </div>
                 <div className="input-group">
                     <label>Title:</label>
-                    <input type="text" name="newTitle" value={newTitle} onChange={handleInputChange} />
+                    <input type="text" name="newTitle" value={newTitle} onChange={e => setNewTitle(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label>Example:</label>
-                    <textarea name="newExample" className='example-textarea' value={newExample} onChange={handleInputChange} />
+                    <textarea name="newExample" className='example-textarea' value={newExample} onChange={e => setNewExample(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label>Notes:</label>
-                    <textarea name="newNotes" value={newNotes} onChange={handleInputChange} />
+                    <textarea name="newNotes" value={newNotes} onChange={e => setNewNotes(e.target.value)} />
                 </div>
                 <div className="input-group">
                     <label>Language:</label>
@@ -124,7 +129,7 @@ const NewSyntaxModal = ({ onSubmit, onClose, languages, categoryIndex, subCatego
                 </div>
                 <div className="button-group">
                     <button onClick={handleSubmit}>Submit</button>
-                    <button onClick={onClose}>Cancel</button>
+                    <button onClick={handleClose}>Cancel</button>
                 </div>
             </div>
         </div>
