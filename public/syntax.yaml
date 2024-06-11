@@ -11,17 +11,15 @@ syntaxes:
       - title: variable declaration
         details:
           - language: python
-            description: Declaring a variable in Python
             example: |
               # Declare a variable
               variable_name = "value"
-              number = 42
-              is_boolean = True
+              number        = 42
+              is_boolean    = True
             notes: >-
               Python uses dynamic typing, so there's no need to explicitly
               declare a variable type.
           - language: groovy
-            description: Declaring a variable in Groovy
             example: |
               // Declare a variable
               def variableName = "value"
@@ -31,7 +29,6 @@ syntaxes:
               Groovy uses `def` to declare a variable without specifying the
               type.
           - language: go
-            description: Declaring a variable in Go
             example: |
               // Declare a variable
               var variableName = "value"
@@ -40,22 +37,67 @@ syntaxes:
             notes: >-
               In Go, you can declare variables using `var` followed by the
               variable name and type.
+      - title: Dynamic type and casting
+        details:
+          - language: python
+            example: |-
+              x = str(10)    # x will be '10'
+              y = int(10)    # y will be 10 
+              z = float(10)  # z will be 10.0
+
+              # to see type. <class 'str'>
+              print(type(x))
+            notes: |-
+              prints 
+              <class 'str'>
+          - language: go
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+          - language: groovy
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+      - title: Variable Memory
+        details:
+          - language: python
+            example: |-
+              # to see reference count
+              print(sys.getrefcount(a))
+
+              del a # delete reference
+            notes: Garbage Collection and reference counting
+          - language: go
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+          - language: groovy
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
       - title: function
         details:
           - language: python
-            description: Declaring a function in Python
-            example: |
+            example: |-
               # Declare a function
               def greet(name):
                   return f"Hello, {name}!"
 
               # Calling a function
               print(greet("World"))
+              # same string contents are shared 
             notes: >-
               Functions in Python are defined using the `def` keyword and can
               return values using the `return` statement.
           - language: groovy
-            description: Declaring a function in Groovy
             example: |
               // Declare a function
               def greet(name) {
@@ -68,7 +110,6 @@ syntaxes:
               Functions in Groovy are defined using the `def` keyword and do not
               require a return type.
           - language: go
-            description: Declaring a function in Go
             example: |
               // Declare a function
               func greet(name string) string {
@@ -83,7 +124,6 @@ syntaxes:
       - title: class
         details:
           - language: python
-            description: Declaring a class in Python
             example: |
               # Declare a class
               class Example:
@@ -102,7 +142,6 @@ syntaxes:
               Python classes are defined using the `class` keyword and methods
               are defined with `def`.
           - language: groovy
-            description: Declaring a class in Groovy
             example: |
               // Declare a class
               class Example {
@@ -124,7 +163,6 @@ syntaxes:
               Groovy classes are similar to Java classes but with additional
               Groovy features.
           - language: go
-            description: Declaring a struct in Go
             example: |
               // Declare a struct
               type Example struct {
@@ -146,7 +184,6 @@ syntaxes:
       - title: constant
         details:
           - language: python
-            description: Declaring a constant in Python
             example: |
               # Declare a constant
               PI = 3.14159
@@ -155,14 +192,12 @@ syntaxes:
               Python does not have built-in constant support, but by convention,
               constants are written in all uppercase letters.
           - language: groovy
-            description: Declaring a constant in Groovy
             example: |
               // Declare a constant
               final PI = 3.14159
               final GRAVITY = 9.8
             notes: Groovy uses the `final` keyword to declare constants.
           - language: go
-            description: Declaring a constant in Go
             example: |
               // Declare a constant
               const PI = 3.14159
@@ -171,7 +206,6 @@ syntaxes:
       - title: array
         details:
           - language: python
-            description: Declaring an array in Python
             example: |
               # Declare an array
               numbers = [1, 2, 3, 4, 5]
@@ -180,7 +214,6 @@ syntaxes:
               Python uses lists to represent arrays, which can contain elements
               of different types.
           - language: groovy
-            description: Declaring an array in Groovy
             example: |
               // Declare an array
               def numbers = [1, 2, 3, 4, 5]
@@ -189,7 +222,6 @@ syntaxes:
               Groovy uses lists to represent arrays, and elements can be of
               different types.
           - language: go
-            description: Declaring an array in Go
             example: |
               // Declare an array
               var numbers = [5]int{1, 2, 3, 4, 5}
@@ -200,22 +232,77 @@ syntaxes:
       - title: dictionary
         details:
           - language: python
-            description: Declaring a dictionary in Python
             example: |
               # Declare a dictionary
               person = {"name": "Alice", "age": 30}
+
+              # Accessing dictionary elements
+              print(person["name"])  # Output: Alice
             notes: Python uses dictionaries to store key-value pairs.
           - language: groovy
-            description: Declaring a map in Groovy
             example: |
               // Declare a map
               def person = [name: "Alice", age: 30]
+
+              // Accessing map elements
+              println person.name  // Output: Alice
             notes: Groovy uses maps to store key-value pairs.
           - language: go
-            description: Declaring a map in Go
             example: |
               // Declare a map
               var person = map[string]interface{}{"name": "Alice", "age": 30}
+
+              // Accessing map elements
+              fmt.Println(person["name"])  // Output: Alice
             notes: >-
               Go uses maps to store key-value pairs, with the key type and value
               type specified.
+      - title: 'Miscellaneous   '
+        details:
+          - language: python
+            example: |-
+              # single line
+
+              '''
+              This is a multiline
+              comment.
+              '''
+              # Multiple statement 
+              import sys; x = 'foo'; sys.stdout.write(x + '\n')
+            notes: Double click to update note
+          - language: go
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+          - language: groovy
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+      - title: Double click to edit Title
+        details:
+          - language: python
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+          - language: go
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+          - language: groovy
+            example: |-
+              {
+                Double click to add an example
+              }
+            notes: Double click to update note
+  - category: declaration
+    subcategories: []
+  - category: declaration
+    subcategories: []

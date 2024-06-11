@@ -1,39 +1,41 @@
 import React, { useState } from 'react';
 import SyntaxBox from './SyntaxBox';
-import editIcon from './assets/edit_note.svg';
-import newIcon from './assets/new_syntax.svg';
+import deleteIcon from './assets/delete_raw .svg';
+import { useSyntax } from './SyntaxContext';
+import { getSubcategory, updateSubcategoryTitle, insertDummySubcategory, deletedSubcategory } from './dataUtils';
 import './styles.css';
 
-const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit, onNewSyntax }) => {
+const SyntaxRow = ({ categoryIndex, subcategoryIndex }) => {
+    const { data, setData, selectedLanguages, languages } = useSyntax();
+
+    const subcategory = getSubcategory(data, categoryIndex, subcategoryIndex);
+    const { title, details } = subcategory;
+
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(title);
-
-    const handleEditClick = () => {
-        setIsEditing(true);
-    };
 
     const handleTitleChange = (event) => {
         setEditedTitle(event.target.value);
     };
 
     const handleTitleBlur = () => {
+        const updatedData = updateSubcategoryTitle(data, categoryIndex, subcategoryIndex, editedTitle);
+        setData(updatedData);
         setIsEditing(false);
-        onTitleEdit(editedTitle);
     };
 
-    const handleSyntaxEdit = (index, newDetail) => {
-        onDetailEdit(index, newDetail);
+    const handleTitleDoubleClick = () => {
+        setIsEditing(true);
     };
 
     const handleNewClick = () => {
-        // Logic for handling new syntax click can be implemented here
-        onNewSyntax()
-        console.log("handleNewClick")
+        const updatedData = insertDummySubcategory(data, languages, categoryIndex, subcategoryIndex);
+        setData(updatedData);
     };
 
     return (
         <div className="syntax-row">
-            <div className="syntax-row-title">
+            <div className="syntax-row-title" onDoubleClick={handleTitleDoubleClick}>
                 {isEditing ? (
                     <input
                         type="text"
@@ -45,27 +47,25 @@ const SyntaxRow = ({ title, details, onTitleEdit, onDetailEdit, onNewSyntax }) =
                 ) : (
                     <h3>{title}</h3>
                 )}
-                <img
-                    src={editIcon}
-                    alt="Edit"
-                    className="edit-icon"
-                    onClick={handleEditClick}
-                />
             </div>
             <div className="syntax-column">
-                {details.map((detail, index) => (
-                    <SyntaxBox
-                        key={index}
-                        details={detail}
-                        onEdit={(newDetail) => handleSyntaxEdit(index, newDetail)}
-                    />
-                ))}
+                {selectedLanguages
+                    .map(language => details.findIndex(detail => detail.language === language))
+                    .filter(index => index !== -1)
+                    .map((languageIndex, index) => (
+                        <SyntaxBox
+                            key={index}
+                            categoryIndex={categoryIndex}
+                            subcategoryIndex={subcategoryIndex}
+                            languageIndex={languageIndex}
+                        />
+                    ))}
             </div>
             <img
-                src={newIcon}
+                src={deleteIcon}
                 alt="New"
                 className="new-icon"
-                onClick={ handleNewClick}
+                onClick={()=> setData(deletedSubcategory(data, categoryIndex, subcategoryIndex))}
             />
         </div>
     );

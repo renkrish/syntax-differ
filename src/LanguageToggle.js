@@ -1,7 +1,11 @@
+// LanguageToggle.js
 import React from 'react';
+import { useSyntax } from './SyntaxContext';
 import './styles.css'; // Import CSS file for styling
 
-const LanguageToggle = ({ languages, selectedLanguages, toggleLanguage }) => {
+const LanguageToggle = () => {
+    const { languages, selectedLanguages, toggleLanguage } = useSyntax();
+
     return (
         <div className="language-toggle-container">
             {languages.map(language => (

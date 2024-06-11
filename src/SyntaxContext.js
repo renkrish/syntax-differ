@@ -13,6 +13,16 @@ export const SyntaxProvider = ({ children }) => {
     const [error, setError] = useState(null);
     const [generatedYaml, setGeneratedYaml] = useState('');
     const [showYamlModal, setShowYamlModal] = useState(false);
+    const toggleLanguage = (language) => {
+        const index = selectedLanguages.indexOf(language);
+        if (index === -1) {
+            setSelectedLanguages([...selectedLanguages, language]);
+        } else {
+            const updatedLanguages = [...selectedLanguages];
+            updatedLanguages.splice(index, 1);
+            setSelectedLanguages(updatedLanguages);
+        }
+    };
 
     return (
         <SyntaxContext.Provider value={{
@@ -20,8 +30,6 @@ export const SyntaxProvider = ({ children }) => {
             setData,
             selectedLanguages,
             setSelectedLanguages,
-            showNewSyntaxModal,
-            setShowNewSyntaxModal,
             newCategoryIndex,
             setNewCategoryIndex,
             newSubcategoryIndex,
@@ -34,6 +42,7 @@ export const SyntaxProvider = ({ children }) => {
             setGeneratedYaml,
             showYamlModal,
             setShowYamlModal,
+            toggleLanguage
         }}>
             {children}
         </SyntaxContext.Provider>

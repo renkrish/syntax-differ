@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import editIcon from './assets/edit_note.svg';
+import { useSyntax } from './SyntaxContext';
+import { updateDetailExample, updateDetailNotes } from './dataUtils';
 import './styles.css';
 
-const SyntaxBox = ({ details, onEdit }) => {
+const SyntaxBox = ({ categoryIndex, subcategoryIndex, languageIndex }) => {
+    const { data, setData } = useSyntax();
+
+    const details = data.syntaxes[categoryIndex].subcategories[subcategoryIndex].details[languageIndex];
     const [isExampleEditing, setIsExampleEditing] = useState(false);
     const [editedExample, setEditedExample] = useState(details.example);
 
     const [isNotesEditing, setIsNotesEditing] = useState(false);
     const [editedNotes, setEditedNotes] = useState(details.notes);
 
-    const handleExampleEditClick = () => {
+    const handleExampleDoubleClick = () => {
         setIsExampleEditing(true);
     };
 
-    const handleNotesEditClick = () => {
+    const handleNotesDoubleClick = () => {
         setIsNotesEditing(true);
     };
 
@@ -28,18 +32,20 @@ const SyntaxBox = ({ details, onEdit }) => {
     };
 
     const handleExampleBlur = () => {
+        const updatedData = updateDetailExample(data, categoryIndex, subcategoryIndex, languageIndex, editedExample);
+        setData(updatedData);
         setIsExampleEditing(false);
-        onEdit({ ...details, example: editedExample });
     };
 
     const handleNotesBlur = () => {
+        const updatedData = updateDetailNotes(data, categoryIndex, subcategoryIndex, languageIndex, editedNotes);
+        setData(updatedData);
         setIsNotesEditing(false);
-        onEdit({ ...details, notes: editedNotes });
     };
 
     return (
         <div className="syntax-box">
-            <div className="syntax-box-content">
+            <div className="syntax-box-content" onDoubleClick={handleExampleDoubleClick}>
                 {isExampleEditing ? (
                     <textarea
                         value={editedExample}
@@ -48,20 +54,12 @@ const SyntaxBox = ({ details, onEdit }) => {
                         autoFocus
                     />
                 ) : (
-                    <>
-                        <img
-                            src={editIcon}
-                            alt="Edit Example"
-                            className="edit-icon"
-                            onClick={handleExampleEditClick}
-                        />
-                        <SyntaxHighlighter language={details.language} style={docco}>
-                            {details.example}
-                        </SyntaxHighlighter>
-                    </>
+                    <SyntaxHighlighter language={details.language} style={docco}>
+                        {details.example}
+                    </SyntaxHighlighter>
                 )}
             </div>
-            <div className="syntax-box-notes-container">
+            <div className="syntax-box-notes-container" onDoubleClick={handleNotesDoubleClick}>
                 {isNotesEditing ? (
                     <textarea
                         value={editedNotes}
@@ -70,15 +68,7 @@ const SyntaxBox = ({ details, onEdit }) => {
                         autoFocus
                     />
                 ) : (
-                    <>
-                        <img
-                            src={editIcon}
-                            alt="Edit Notes"
-                            className="edit-icon"
-                            onClick={handleNotesEditClick}
-                        />
-                        <p>{details.notes}</p>
-                    </>
+                    <p>{details.notes}</p>
                 )}
             </div>
         </div>
